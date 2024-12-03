@@ -18,6 +18,8 @@ where
     K: Hash + Eq + Clone + Debug,
     V: Clone + Debug,
 {
+    // Ici je crée une fonction nouveau qui prend en paramètre 
+    // une capacité et qui retourne un cache
     pub fn nouveau(capacite: usize) -> Self {
         Cache {
             capacite,
@@ -26,6 +28,8 @@ where
         }
     }
 
+    // Ici je crée une fonction obtenir qui prend en paramètre 
+    // une clé et qui retourne la valeur associée à cette clé
     pub fn obtenir(&mut self, cle: &K) -> Option<&V> {
         if let Some(valeur) = self.map.get(cle) {
             self.ordre.retain(|k| k != cle);
@@ -36,6 +40,8 @@ where
         }
     }
 
+    // Ici je crée une fonction ajouter qui prend en paramètre 
+    // une clé et une valeur et qui ajoute la clé et la valeur dans le cache
     pub fn ajouter(&mut self, cle: K, valeur: V) {
         if self.map.len() >= self.capacite {
             if let Some(plus_vieux) = self.ordre.pop_back() {
@@ -48,7 +54,8 @@ where
     }
 }
 
-//tests unitaires pour l'ajout et l'obtention d'éléments dans le cache et la suppression de l'élément le plus ancien
+//tests unitaires pour l'ajout et l'obtention d'éléments dans le cache 
+//et la suppression de l'élément le plus ancien
 
 #[cfg(test)]
 mod tests {
