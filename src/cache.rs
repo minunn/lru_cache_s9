@@ -2,6 +2,11 @@ use std::collections::{HashMap, VecDeque};
 use std::hash::Hash;
 use std::fmt::Debug;
 
+pub trait CacheOperations<K, V> {
+    fn ajouter(&mut self, cle: K, valeur: V);
+    fn obtenir(&mut self, cle: &K) -> Option<&V>;
+}
+
 #[derive(Debug)]
 pub struct Cache<K, V>
 where
@@ -27,10 +32,16 @@ where
             ordre: VecDeque::with_capacity(capacite),
         }
     }
+}
 
+impl<K, V> CacheOperations<K, V> for Cache<K, V>
+where
+    K: Hash + Eq + Clone + Debug,
+    V: Clone + Debug,
+{
     // Ici je crée une fonction obtenir qui prend en paramètre 
     // une clé et qui retourne la valeur associée à cette clé
-    pub fn obtenir(&mut self, cle: &K) -> Option<&V> {
+    fn obtenir(&mut self, cle: &K) -> Option<&V> {
         if let Some(valeur) = self.map.get(cle) {
             self.ordre.retain(|k| k != cle);
             self.ordre.push_front(cle.clone());
@@ -42,7 +53,7 @@ where
 
     // Ici je crée une fonction ajouter qui prend en paramètre 
     // une clé et une valeur et qui ajoute la clé et la valeur dans le cache
-    pub fn ajouter(&mut self, cle: K, valeur: V) {
+     fn ajouter(&mut self, cle: K, valeur: V) {
         if self.map.len() >= self.capacite {
             if let Some(plus_vieux) = self.ordre.pop_back() {
                 self.map.remove(&plus_vieux);

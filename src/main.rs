@@ -1,5 +1,5 @@
 // J'importe le module cache et j'importe la structure Cache dans le reste du projet.
-use lru_cache::Cache;
+use lru_cache::{cache::CacheOperations, file_storage::CacheStorage, Cache};
 
 fn main() {
     // Je crée une cache mutable de type Cache<String, String> avec une capacité de 3

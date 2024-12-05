@@ -1,17 +1,22 @@
-use super::cache::Cache;
+use super::cache::{Cache, CacheOperations};
 use std::fs::OpenOptions;
 use std::io::{Read, Write};
 use std::str::FromStr;
 use std::hash::Hash;
 use std::fmt::Debug;
 
-impl<K, V> Cache<K, V>
+pub trait CacheStorage<K, V> {
+    fn sauvegarder(&self, fichier: &str);
+    fn charger_persistant(capacite: usize, fichier: &str) -> Self;
+}
+
+impl<K, V> CacheStorage<K, V> for Cache<K, V>
 where
     K: ToString + FromStr + Clone + Hash + Eq + Debug,
     V: ToString + FromStr + Clone + Debug,
 {
     // Je crée une méthode sauvegarder qui prend en paramètre le nom du fichier où sauvegarder le cache
-    pub fn sauvegarder(&self, fichier: &str) {
+     fn sauvegarder(&self, fichier: &str) {
         let mut f = OpenOptions::new()
             .create(true)
             .write(true)
@@ -29,7 +34,7 @@ where
     }
 
     // Je crée une méthode charger_persistant qui prend en paramètre la capacité du cache et le nom du fichier
-    pub fn charger_persistant(capacite: usize, fichier: &str) -> Self {
+     fn charger_persistant(capacite: usize, fichier: &str) -> Self {
         let mut cache = Cache::nouveau(capacite);
         let mut contenu = String::new();
 

@@ -2,6 +2,8 @@ pub use lru_cache::Cache;
 
 #[cfg(test)] 
 mod tests {
+    use lru_cache::{cache::CacheOperations, file_storage::CacheStorage};
+
     use super::*;
 
     // Test pour vérifier l'ajout et la récupération d'éléments dans le cache
